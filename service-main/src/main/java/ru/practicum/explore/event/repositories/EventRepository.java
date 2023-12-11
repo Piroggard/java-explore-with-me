@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explore.category.Category;
-import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.event.Event;
 
 import java.util.Optional;
@@ -15,8 +14,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventCriter
     Page<Event> findAllByInitiatorId(Long userId, PageRequest pageRequest);
 
     Optional<Event> findByIdAndInitiatorId(Long eventId, Long userId);
-
-    Optional<Event> findByIdAndState(Long eventId, EventState eventState);
 
     Boolean existsByCategory(Category category);
 }
