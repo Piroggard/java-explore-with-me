@@ -60,9 +60,11 @@ public class PublicEventController {
             end = LocalDateTime.parse(rangeEnd, dateTimeFormatter);
         }
 
-        if (start != null && end != null && start.isAfter(end)) {
-            log.info("Дата начала {} находится после даты окончания {}.", start, end);
-            throw new ParameterException(String.format("Начальная дата %s находится после даты окончания %s.", start, end));
+        if (start != null && end != null) {
+            if (start.isAfter(end)) {
+                log.info("Дата начала {} находится после даты окончания {}.", start, end);
+                throw new ParameterException(String.format("Начальная дата %s находится после даты окончания %s.", start, end));
+            }
         }
 
         PublicSearchCriteria param = PublicSearchCriteria.builder()
