@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HitDto {
 
-     String app;
-     String uri;
-     String ip;
+    String app;
+    String uri;
+    String ip;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime timestamp;
+    LocalDateTime timestamp;
 }
