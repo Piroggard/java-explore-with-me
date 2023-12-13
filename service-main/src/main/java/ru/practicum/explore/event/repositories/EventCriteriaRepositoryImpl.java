@@ -23,6 +23,7 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
 
     private final EntityManager entityManager;
     private final CriteriaBuilder criteriaBuilder;
+    private final int oneHundredYearsLater = 100;
 
     public EventCriteriaRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -96,7 +97,7 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
             predicates.add(criteriaBuilder.between(eventRoot.get("eventDate"), rangeStart, rangeEnd));
         } else {
             predicates.add(criteriaBuilder.between(eventRoot.get("eventDate"), LocalDateTime.now(),
-                    LocalDateTime.now().plusYears(100)));
+                    LocalDateTime.now().plusYears(oneHundredYearsLater)));
         }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
