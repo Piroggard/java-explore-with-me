@@ -120,7 +120,7 @@ public class EventServiceImpl implements EventService {
                         "Событие с идентификатором id=%s и пользователем его добавившим id=%s не найдено",
                         eventId, userId)));
 
-        if (eventToUpd.getState().equals(PUBLISHED)) {
+        if (PUBLISHED.equals(eventToUpd.getState())) {
             throw new ConflictException("Нельзя обновить опубликованное событие");
         }
 
