@@ -525,11 +525,6 @@ public class EventServiceImpl implements EventService {
                 new NotFoundException(String.format("User with id=%s was not found", userId)));
     }
 
-    private Event getEvent(Long eventId, Long userId) {
-        return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new NotFoundException(String.format(
-                        "Event with id=%s and added by user id=%s was not found", eventId, userId)));
-    }
 
     private Event getEvent(Long eventId) {
         return eventRepository.findById(eventId).orElseThrow(() -> {
@@ -544,11 +539,6 @@ public class EventServiceImpl implements EventService {
         return eventDto;
     }
 
-    private void setConfirmedRequests(List<EventDto> events) {
-        for (EventDto event : events) {
-            event.setConfirmedRequests(requestRepository.countByEventIdAndConfirmed(event.getId()));
-        }
-    }
 
     private Category getCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
