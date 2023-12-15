@@ -1,6 +1,5 @@
 package ru.practicum.explore.event.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +40,6 @@ import ru.practicum.explore.util.CountConfirmedRequests;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
