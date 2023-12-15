@@ -17,23 +17,23 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventFullDto {
 
-     Long id;
-     String title;
-     String description;
-     String annotation;
-     CategoryDto category;
-     UserShortDto initiator;
+    Long id;
+    String title;
+    String description;
+    String annotation;
+    CategoryDto category;
+    UserShortDto initiator;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime eventDate;
-     Long confirmedRequests;
-     Boolean paid;
-     Long views;
-     LocationDto location;
+    LocalDateTime eventDate;
+    Long confirmedRequests;
+    Boolean paid;
+    Long views;
+    LocationDto location;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime createdOn;
+    LocalDateTime createdOn;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime publishedOn;
-     Long participantLimit;
-     Boolean requestModeration;
-     EventState state;
+    LocalDateTime publishedOn;
+    Long participantLimit;
+    Boolean requestModeration;
+    EventState state;
 }

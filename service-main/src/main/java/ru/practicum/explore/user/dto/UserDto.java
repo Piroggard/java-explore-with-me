@@ -14,12 +14,12 @@ import javax.validation.constraints.Size;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
-     Long id;
+    Long id;
     @NotBlank
     @Size(min = 2, max = 250)
-     String name;
+    String name;
     @Email
     @NotBlank
     @Size(min = 6, max = 254)
-     String email;
+    String email;
 }

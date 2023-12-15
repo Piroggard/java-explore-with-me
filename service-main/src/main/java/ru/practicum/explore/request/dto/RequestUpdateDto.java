@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestUpdateDto {
-     List<Long> requestIds;
+    List<Long> requestIds;
 
-     RequestStatus status;
+    RequestStatus status;
 }

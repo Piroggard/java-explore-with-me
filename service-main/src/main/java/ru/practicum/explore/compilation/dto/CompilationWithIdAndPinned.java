@@ -14,8 +14,8 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompilationWithIdAndPinned {
-     Long id;
-     String title;
-     Boolean pinned;
-     List<EventShortDto> events;
+    Long id;
+    String title;
+    Boolean pinned;
+    List<EventShortDto> events;
 }

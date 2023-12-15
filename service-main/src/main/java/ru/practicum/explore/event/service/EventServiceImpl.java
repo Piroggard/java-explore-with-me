@@ -40,6 +40,8 @@ import ru.practicum.explore.util.CountConfirmedRequests;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,7 +49,6 @@ import static ru.practicum.explore.enums.EventState.PUBLISHED;
 import static ru.practicum.explore.enums.StateActionAdmin.PUBLISH_EVENT;
 
 
-@RequiredArgsConstructor
 @Slf4j
 @Service
 public class EventServiceImpl implements EventService {
@@ -59,10 +60,22 @@ public class EventServiceImpl implements EventService {
     private final StatsClient statsClient;
     private final CategoryRepository categoryRepository;
 
-    @Value("${server.url}")
-    private String serviceName;
+    private final String serviceName;
     private final HashSet<String> requestHashSet = new HashSet<>();
     private final HashMap<Long, HashSet<String>> httpServletRequests = new HashMap<>();
+
+    public EventServiceImpl(EventRepository eventRepository, LocationRepository locationRepository,
+                            RequestRepository requestRepository, UserRepository userRepository,
+                            StatsClient statsClient, CategoryRepository categoryRepository,
+                            @Value("${server.url}") String serviceName) {
+        this.eventRepository = eventRepository;
+        this.locationRepository = locationRepository;
+        this.requestRepository = requestRepository;
+        this.userRepository = userRepository;
+        this.statsClient = statsClient;
+        this.categoryRepository = categoryRepository;
+        this.serviceName = serviceName;
+    }
 
     @Override
     @Transactional
@@ -71,7 +84,7 @@ public class EventServiceImpl implements EventService {
 
         LocalDateTime minStartDate = LocalDateTime.now().plusHours(1);
         if (eventNewDto.getEventDate().isBefore(minStartDate)) {
-            throw new ConflictException(String.format("Дата события не может быть ранее даты добавления на 1 час", 1));
+            throw new ConflictException(String.format("Дата события не может быть ранее даты добавления на %d час", 1));
         }
 
         Event createdEvent = EventMapper.toEvent(user, eventNewDto);
@@ -127,7 +140,7 @@ public class EventServiceImpl implements EventService {
         if (eventDto.getEventDate() != null) {
             LocalDateTime minStartDate = LocalDateTime.now().plusHours(1);
             if (eventDto.getEventDate().isBefore(minStartDate)) {
-                throw new ConflictException(String.format("Дата события не может быть ранее даты добавления на 1 час", 1));
+                throw new ConflictException(String.format("Дата события не может быть ранее даты добавления на %d час", 1));
             }
             eventToUpd.setEventDate(eventDto.getEventDate());
         }
@@ -190,7 +203,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventDto) {
         Event eventToUpdAdmin = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException(String.format("Событие не найдено", eventId)));
+                new NotFoundException(String.format("Событие %d не найдено", eventId)));
 
         if (eventDto.getEventDate() != null) {
             var minStartDate = LocalDateTime.now().plusHours(1);
@@ -246,7 +259,7 @@ public class EventServiceImpl implements EventService {
                 LocalDateTime minStartDate = datePublish.plusHours(1);
                 if (eventToUpdAdmin.getEventDate().isBefore(minStartDate)) {
                     throw new ConflictException(
-                            String.format("Дата события должна быть не ранее, чем за час до публикации", 1));
+                            String.format("Дата события должна быть не ранее, чем за %d час до публикации", 1));
                 }
                 eventToUpdAdmin.setState(PUBLISHED);
                 eventToUpdAdmin.setPublishedOn(datePublish);
@@ -419,10 +432,15 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
 
         log.info("events.size() {}", events.size());
-        List<EventDto> modifiedEventDtos = eventDtos.stream()
-                .peek(eventDto -> eventDto.setViews(this.getViews(eventDto.getId())))
-                .collect(Collectors.toList());
-        List<EventDto> updatedEventDtos = modifiedEventDtos.stream()
+
+        List<Long> eventIds = eventDtos.stream().map(EventDto::getId).collect(Collectors.toList());
+        Map<String, Long> views = getViews(eventIds);
+        for (EventDto event : eventDtos) {
+            Long viewCount = views.get(String.format("/events/%s", event.getId()));
+            event.setViews(viewCount == null ? 0 : viewCount);
+        }
+
+        List<EventDto> updatedEventDtos = eventDtos.stream()
                 .map(eventDto -> {
                     Event event = events.stream()
                             .filter(e -> e.getId().equals(eventDto.getId()))
@@ -477,10 +495,15 @@ public class EventServiceImpl implements EventService {
                 .build();
         statsClient.saveStats(hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
         log.info(" events.size()= {}  ", events.size());
-        return events.stream()
-                .peek(eventDtos -> eventDtos
-                        .setViews(this.getViews(eventDtos.getId())))
-                .collect(Collectors.toSet());
+
+        List<Long> eventIds = events.stream().map(EventShortDto::getId).collect(Collectors.toList());
+        Map<String, Long> views = getViews(eventIds);
+        for (EventShortDto event : events) {
+            Long viewCount = views.get(String.format("/events/%s", event.getId()));
+            event.setViews(viewCount == null ? 0 : viewCount);
+        }
+
+        return events;
     }
 
     @Override
@@ -494,18 +517,15 @@ public class EventServiceImpl implements EventService {
                 .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED)).count();
     }
 
+    private Map<String, Long> getViews(List<Long> eventIds) {
+        LocalDateTime startViewsDate = LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0);
+        List<String> uris = new ArrayList<>();
+        for (Long eventId : eventIds) {
+            uris.add(String.format("/events/%s", eventId));
+        }
+        List<StatsDto> stats = statsClient.getStats(startViewsDate, LocalDateTime.now(), uris, true);
 
-    private Long getViews(Long eventId) {
-        Event event = eventRepository.getReferenceById(eventId);
-        String[] uris = {"/events/" + eventId};
-        List<StatsDto> stats = statsClient.getStats(event.getCreatedOn(), LocalDateTime.now(),
-                List.of(uris), true);
-
-        return stats
-                .stream()
-                .map(StatsDto::getHits)
-                .findFirst()
-                .orElse(0L);
+        return stats.stream().collect(Collectors.toMap(StatsDto::getUri, StatsDto::getHits));
     }
 
     private Long getViews(Event event) {
@@ -554,6 +574,6 @@ public class EventServiceImpl implements EventService {
         if (size <= 0) {
             throw new ParameterException("Размер параметра должен быть положительным.");
         }
-        return PageRequest.of(from / size, size);
+        return PageRequest.of(from, size);
     }
 }

@@ -19,36 +19,36 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventNewDto {
-     Long id;
+    Long id;
 
     @NotBlank
     @Size(min = 3, max = 120)
-     String title;
+    String title;
 
     @NotBlank
     @Size(min = 20, max = 7000)
-     String description;
+    String description;
 
     @NotBlank
     @Size(min = 20, max = 2000)
-     String annotation;
+    String annotation;
 
     @NotNull
-     Long category;
+    Long category;
 
     @NotNull
-     LocationDto location;
+    LocationDto location;
 
     @NotNull
     @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime eventDate;
+    LocalDateTime eventDate;
 
-     Long participantLimit;
+    Long participantLimit;
 
-     Boolean requestModeration;
+    Boolean requestModeration;
 
-     Boolean paid;
+    Boolean paid;
 
     public Long getParticipantLimit() {
         if (participantLimit == null) {

@@ -69,7 +69,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<CompilationWithIdAndPinned> getCompilations(int from, int size) {
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = PageRequest.of(from, size);
         return compilationRepository.findAll(pageable)
                 .stream()
                 .map(CompilationMapper::toCompWithIdAndPinned)

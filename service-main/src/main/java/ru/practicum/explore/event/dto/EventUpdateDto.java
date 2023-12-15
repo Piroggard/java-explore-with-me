@@ -16,25 +16,25 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventUpdateDto {
     @Size(min = 3, max = 120)
-     String title;
+    String title;
 
     @Size(min = 20, max = 7000)
-     String description;
+    String description;
 
     @Size(min = 20, max = 2000)
-     String annotation;
+    String annotation;
 
-     Long category;
+    Long category;
 
     @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime eventDate;
+    LocalDateTime eventDate;
 
-     LocationDto location;
+    LocationDto location;
 
-     Long participantLimit;
+    Long participantLimit;
 
-     Boolean requestModeration;
+    Boolean requestModeration;
 
-     Boolean paid;
+    Boolean paid;
 }

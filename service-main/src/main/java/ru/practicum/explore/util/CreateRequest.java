@@ -13,6 +13,6 @@ public class CreateRequest {
         if (size <= 0) {
             throw new ParameterException(String.format("Размер параметра size должен быть больше или равен нулю. size = %s", size));
         }
-        return PageRequest.of(from / size, size);
+        return PageRequest.of(from, size);
     }
 }

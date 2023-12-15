@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getCategories(int from, int size) {
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = PageRequest.of(from, size);
         List<Category> categories = categoryRepository.findAll(pageable).getContent();
         return categories.isEmpty() ? Collections.emptyList() : CategoryMapper.listCategoryDtos(categories);
     }

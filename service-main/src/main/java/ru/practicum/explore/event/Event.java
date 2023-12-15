@@ -28,63 +28,63 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-     Long id;
+    Long id;
     @Length(min = 3, max = 120)
     @Column(name = "title", nullable = false)
-     String title;
+    String title;
     @NotBlank
     @NotNull
     @Length(min = 20, max = 7000)
     @Column(name = "description", nullable = false)
-     String description;
+    String description;
     @NotBlank
     @NotNull
     @Length(min = 20, max = 2000)
     @Column(name = "annotation", nullable = false)
-     String annotation;
+    String annotation;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-     Category category;
+    Category category;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "initiator_id", nullable = false)
-     User initiator;
+    User initiator;
 
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
-     Location location;
+    Location location;
 
     @Column(name = "event_date")
-     LocalDateTime eventDate;
+    LocalDateTime eventDate;
 
     @Column(name = "created_on")
-     LocalDateTime createdOn;
+    LocalDateTime createdOn;
 
     @Column(name = "published_on")
-     LocalDateTime publishedOn;
+    LocalDateTime publishedOn;
 
     @Column(name = "participant_limit")
-     Long participantLimit;
+    Long participantLimit;
 
     @OneToMany
     @JoinColumn(name = "event_id")
-     List<Request> allRequests;
+    List<Request> allRequests;
 
     @Column(name = "request_moderation")
-     Boolean requestModeration;
+    Boolean requestModeration;
 
 
     @Column(name = "paid")
-     Boolean paid;
+    Boolean paid;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
-     EventState state;
+    EventState state;
 
     @Column(name = "views")
-     Long views;
+    Long views;
 
     @Override
     public boolean equals(Object o) {

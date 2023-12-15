@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestDto {
-     Long id;
-     Long event;
-     Long requester;
+    Long id;
+    Long event;
+    Long requester;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime created;
-     RequestStatus status;
+    LocalDateTime created;
+    RequestStatus status;
 
 }

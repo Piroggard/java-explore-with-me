@@ -11,17 +11,6 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class RequestMapper {
-    public Request toRequestFromUserIdAndEventId(Long userId, Long eventId) {
-        return Request.builder()
-                .event(Event.builder()
-                        .id(eventId)
-                        .build())
-                .requester(User.builder()
-                        .id(userId)
-                        .build())
-                .build();
-    }
-
     public Request toRequestFromUserAndEvent(User user, Event event) {
         Request request = new Request();
         request.setEvent(event);

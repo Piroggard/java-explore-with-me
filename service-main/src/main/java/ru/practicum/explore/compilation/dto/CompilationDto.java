@@ -15,12 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompilationDto {
-     Long id;
+    Long id;
     @NotBlank
     @Size(max = 50, min = 1)
-     String title;
-     Boolean pinned;
-     List<EventShortDto> events;
+    String title;
+    Boolean pinned;
+    List<EventShortDto> events;
 
     public Boolean getPinned() {
         if (pinned == null) {

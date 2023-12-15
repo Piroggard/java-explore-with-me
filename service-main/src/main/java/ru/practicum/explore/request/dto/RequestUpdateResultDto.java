@@ -13,7 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestUpdateResultDto {
 
-     List<RequestDto> confirmedRequests = new ArrayList<>();
+    List<RequestDto> confirmedRequests = new ArrayList<>();
 
-     List<RequestDto> rejectedRequests = new ArrayList<>();
+    List<RequestDto> rejectedRequests = new ArrayList<>();
 }
