@@ -37,4 +37,5 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     Event event;
+
 }
