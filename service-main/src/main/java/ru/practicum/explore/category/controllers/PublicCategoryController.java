@@ -30,5 +30,4 @@ public class PublicCategoryController {
         log.info(String.format("Получен GET- запрос: /categories/{catId}] (Public). Просмотр категории по (id): %s.", catId));
         return categoryService.getCategoryById(catId);
     }
-
 }
