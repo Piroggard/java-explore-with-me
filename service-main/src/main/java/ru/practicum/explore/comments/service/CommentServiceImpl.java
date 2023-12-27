@@ -37,7 +37,9 @@ public class CommentServiceImpl implements CommentService {
     public CommentShortDto saveComment(Long userId, Long eventId, CommentDto commentDto) {
         User user = getUser(userId);
         Event event = getEvent(eventId);
-
+        if (event.getState() == null) {
+            throw new ParameterException("Состояние события не может быть пустым");
+        }
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new ParameterException("Комментарии доступны только к опубликованным событиям");
         }
