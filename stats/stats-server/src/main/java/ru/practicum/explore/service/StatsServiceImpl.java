@@ -17,6 +17,7 @@ import java.util.List;
 
 import static ru.practicum.explore.model.ModelMapper.toModelHit;
 
+
 @Service
 @Slf4j
 public class StatsServiceImpl implements StatsService {
